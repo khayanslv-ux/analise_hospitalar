@@ -182,3 +182,67 @@ print("""
    → Nenhuma credencial ou senha está hardcoded neste notebook.
    → Em produção, conexões usariam AWS Secrets Manager ou Azure Key Vault.
 """)
+
+# COMMAND ----------
+
+import matplotlib.pyplot as plt
+
+# Query com cálculo da faixa etária
+query = """
+SELECT 
+    CASE 
+        WHEN idade < 18 THEN 'Menor 18'
+        WHEN idade BETWEEN 18 AND 59 THEN 'Adulto'
+        ELSE 'Idoso 60+'
+    END AS faixa_etaria,
+    ROUND(AVG(custo), 2) as custo_medio
+FROM internacoes_hospitalares
+GROUP BY 
+    CASE 
+        WHEN idade < 18 THEN 'Menor 18'
+        WHEN idade BETWEEN 18 AND 59 THEN 'Adulto'
+        ELSE 'Idoso 60+'
+    END
+ORDER BY custo_medio DESC
+"""
+
+resultado = spark.sql(query).toPandas()
+
+# Gráfico menor e compacto
+plt.figure(figsize=(6, 4))  # Tamanho reduzido
+plt.bar(resultado['faixa_etaria'], resultado['custo_medio'], 
+        color=['#FF6B6B', '#4ECDC4', '#45B7D1'], 
+        edgecolor='black', linewidth=1)
+plt.xlabel('Faixa Etária', fontsize=10)
+plt.ylabel('Custo Médio (R$)', fontsize=10)
+plt.title('Custo por Faixa Etária', fontsize=12, fontweight='bold')
+plt.grid(axis='y', alpha=0.3)
+plt.tight_layout()
+plt.show()
+
+# COMMAND ----------
+
+import matplotlib.pyplot as plt
+
+query_diag = """
+SELECT 
+    diagnostico,
+    ROUND(AVG(custo), 2) as custo_medio
+FROM internacoes_hospitalares
+GROUP BY diagnostico
+ORDER BY custo_medio DESC
+LIMIT 5  -- Top 5 diagnósticos
+"""
+
+resultado = spark.sql(query_diag).toPandas()
+
+# Gráfico de barras horizontal (mais compacto)
+plt.figure(figsize=(6, 4))  # Tamanho reduzido
+plt.barh(resultado['diagnostico'], resultado['custo_medio'], 
+         color='#9B59B6', edgecolor='black', linewidth=1)
+plt.xlabel('Custo Médio (R$)', fontsize=10)
+plt.ylabel('Diagnóstico', fontsize=10)
+plt.title('Top 5 Diagnósticos Mais Caros', fontsize=12, fontweight='bold')
+plt.grid(axis='x', alpha=0.3)
+plt.tight_layout()
+plt.show()
