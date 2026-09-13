@@ -1,9 +1,6 @@
-# Databricks notebook source
-# ═══════════════════════════════════════════════════════════
-# LIMPAR TUDO E RECOMEÇAR DO ZERO
-# ═══════════════════════════════════════════════════════════
 
-print("🧹 INICIANDO LIMPEZA COMPLETA...\n")
+
+print(" INICIANDO LIMPEZA COMPLETA \n")
 
 # 1. Remover caminhos antigos do Delta Lake
 caminhos_para_limpar = [
@@ -162,7 +159,7 @@ display(spark.sql(query_mensal))
 
 print("""
 ╔══════════════════════════════════════════════════════════════╗
-║   🔒 BOAS PRÁTICAS DE SEGURANÇA E GOVERNANÇA APLICADAS     ║
+║    BOAS PRÁTICAS DE SEGURANÇA E GOVERNANÇA APLICADAS     ║
 ╚══════════════════════════════════════════════════════════════╝
 
 1. DELTA LAKE (Integridade dos Dados):
@@ -170,9 +167,9 @@ print("""
    ✓ Versionamento automático permite rollback em caso de erro no pipeline.
 
 2. ARQUITETURA MEDALLION (Bronze/Silver/Gold):
-   🥉 Bronze: Dados brutos (tabela 'internacoes_hospitalares')
-   🥈 Silver: Dados transformados e limpos (tabela 'internacoes_delta')
-   🥇 Gold: Camada pronta para dashboards e análise de negócio.
+    Bronze: Dados brutos (tabela 'internacoes_hospitalares')
+    Silver: Dados transformados e limpos (tabela 'internacoes_delta')
+    Gold: Camada pronta para dashboards e análise de negócio.
 
 3. PRINCÍPIO DO MENOR PRIVILÉGIO (Conceito):
    → Em produção, o Unity Catalog seria usado para mascarar a coluna 'nome' 
